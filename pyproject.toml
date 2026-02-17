@@ -1,0 +1,14 @@
+[project]
+name = "bombe"
+version = "0.1.0"
+description = "BombParty – jeu de vocabulaire multijoueur"
+requires-python = ">=3.11"
+dependencies = [
+    "flask>=3.1",
+    "flask-sock>=0.7",
+    "simple-websocket>=1.1",
+    "pylexique>=0.4",
+]
+
+[project.optional-dependencies]
+dev = ["black"]

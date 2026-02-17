@@ -1,0 +1,17 @@
+{
+  "host": "0.0.0.0",
+  "port": 8765,
+
+  "dictionary_file": "fr-lexique_org-10percent_cutoff.json",
+
+  "lives_per_player": 3,
+  "timer_min_seconds": 10,
+  "timer_max_seconds": 20,
+  "turn_transition_delay_seconds": 2.5,
+
+  "start_mode": "vote",
+  "min_players_to_start": 1,
+
+  "echo_typing_to_sender": false,
+  "normalize_spellings": true
+}
