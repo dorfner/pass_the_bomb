@@ -1,15 +1,18 @@
 # Pass the bomb
 
-### Install
+## Quickstart
+
+### Installation
 ```
 make install
 ```
 
-### Start game
+### Jouer au jeu
 ```
 make run
 ```
-Connect to any ip on port 8765.
+Se connecter au jeu sur n'importe quelle IP au port 8765.
+
 
 ## Description
 
@@ -20,7 +23,7 @@ Jeu multijoueur dans lequel les joueurs doivent trouver, à tour de rôle, un mo
 
 ```
 pass_the_bomb/
-├── backend/
+├── src/
 │   ├── app.py              # Flask entry point (WS + static)
 │   ├── game_state.py       # Logique de jeu thread-safe
 │   ├── utils.py
@@ -30,7 +33,7 @@ pass_the_bomb/
 │   ├── static/             # JS, CSS (servis par Flask)
 │   └── templates/          # HTML (Jinja2)
 ├── tests/
-├── pyproject.toml          # Dépendances (uv)
+├── pyproject.toml          # Dépendances
 └── Makefile
 ```
 

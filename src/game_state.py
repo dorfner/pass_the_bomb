@@ -2,8 +2,8 @@ import json
 import random
 import threading
 import time
-from backend.config import AppConfig
-from backend.utils import remove_accents
+from src.config import AppConfig
+from src.utils import remove_accents
 
 
 class GameState:

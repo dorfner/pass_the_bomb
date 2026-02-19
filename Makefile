@@ -10,16 +10,16 @@ venv:
 
 install: venv
 	$(PIP) install --upgrade pip
-	$(PIP) install -r requirements.txt
+	$(PIP) install .
 
 test:
 	$(PYTHON) -m unittest discover -s tests -v
 
 run:
-	$(PYTHON) -m backend.app
+	$(PYTHON) -m src.app
 
 format:
-	$(BLACK) backend tests
+	$(BLACK) src tests
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
