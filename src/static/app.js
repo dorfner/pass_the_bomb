@@ -40,8 +40,8 @@ function Lobby({ onJoin }) {
 
     return (
         <div className="card lobby">
-            <h1>💣 BombParty</h1>
-            <p>Trouve un mot contenant la syllabe… avant que ça explose !</p>
+            <h1>Pass the B💣mb!!</h1>
+            <p>pipi table...</p>
             <form onSubmit={submit}>
                 <input
                     type="text"
