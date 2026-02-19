@@ -26,7 +26,6 @@ class GameState:
         self.turn_transition_delay_seconds = config.turn_transition_delay_seconds
         self.start_mode = config.start_mode
         self.min_players_to_start = config.min_players_to_start
-        self.echo_typing_to_sender = config.echo_typing_to_sender
         self.normalize_spellings = config.normalize_spellings
 
         self.ipa_word = ""

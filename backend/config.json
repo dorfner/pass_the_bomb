@@ -12,6 +12,5 @@
   "start_mode": "vote",
   "min_players_to_start": 1,
 
-  "echo_typing_to_sender": false,
   "normalize_spellings": true
 }
