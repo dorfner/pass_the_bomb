@@ -50,9 +50,9 @@ def websocket(ws):
                 game.add_player(ws, msg.get("name", "Anonyme"))
 
             elif msg_type == "SUBMIT":
-                word = msg.get("word")
-                if word:
-                    game.submit_word(ws, word)
+                answer = msg.get("answer")
+                if answer:
+                    game.submit_answer(ws, answer)
 
             elif msg_type == "TYPING":
                 text = msg.get("text", "")

@@ -28,11 +28,10 @@ class GameState:
         self.min_players_to_start = config.min_players_to_start
         self.normalize_spellings = config.normalize_spellings
 
-        self.ipa_word = ""
-        self.spellings = []
-        self.previous_ipa_word = ""
-        self.previous_spellings = []
-        # self.used_words = set()
+        self.question = ""
+        self.answers = []
+        self.previous_question = ""
+        self.previous_answers = []
         self.timer = None
         self.timer_ends_at = None  # when current turn timer expires (for -1s on wrong)
         self.is_running = False
@@ -83,7 +82,7 @@ class GameState:
             if self.players:
                 self._broadcast_lobby()
 
-    def submit_word(self, ws, word):
+    def submit_answer(self, ws, player_answer):
         with self.lock:
             if not self.is_running or not self.player_order:
                 return
@@ -94,15 +93,14 @@ class GameState:
                 return
 
             if (self.normalize_spellings):
-                word = remove_accents(word.lower().strip())
-                spellings = [remove_accents(s.lower().strip()) for s in self.spellings]
+                player_answer = remove_accents(player_answer.lower().strip())
+                accepted_answers = [remove_accents(s.lower().strip()) for s in self.answers]
             else:
-                word = word.lower().strip()
-                spellings = self.spellings
+                player_answer = player_answer.lower().strip()
+                accepted_answers = self.answers
 
-            if word in spellings:
-                # self.used_words.add(normalized)
-                self._broadcast({"type": "Valid", "word": word})
+            if player_answer in accepted_answers:
+                self._broadcast({"type": "Valid", "answer": player_answer})
                 self._advance_turn()
                 self._start_turn()
             else:
@@ -173,7 +171,6 @@ class GameState:
     def _start_game(self):
         self.is_running = True
         self.start_votes.clear()
-        # self.used_words.clear()
         self.current_turn = 0
         self._start_turn()
 
@@ -209,35 +206,35 @@ class GameState:
         if not self.player_order:
             return
 
-        # Save previous word before selecting new one
-        if self.ipa_word:  # Only save if we had a previous word
-            self.previous_ipa_word = self.ipa_word
-            self.previous_spellings = self.spellings.copy()
+        # Save previous question before selecting new one
+        if self.question:  # Only save if we had a previous question
+            self.previous_question = self.question
+            self.previous_answers = self.answers.copy()
 
-        self.ipa_word = random.choice(self.spelling_dict_keys)
-        self.spellings = self.spelling_dict[self.ipa_word]
+        self.question = random.choice(self.spelling_dict_keys)
+        self.answers = self.spelling_dict[self.question]
 
         active_ws = self.player_order[self.current_turn % len(self.player_order)]
         active_name = self.players[active_ws]["name"]
         
-        print(self.spellings)
+        print(self.answers)
         self._broadcast(
             {
                 "type": "NEW_TURN",
-                "ipa_word": self.ipa_word,
+                "question": self.question,
                 "activePlayer": active_name,
                 "players": [
                     {"name": self.players[ws]["name"], "lives": self.players[ws]["lives"]}
                     for ws in self.player_order
                 ],
-                "previousAnswers": self.spellings,
-                "previousWord": self.previous_ipa_word,
-                "previousWordAnswers": self.previous_spellings,
+                "previousAnswers": self.answers,
+                "previousQuestion": self.previous_question,
+                "previousQuestionAnswers": self.previous_answers,
             }
         )
 
         # Only start a new timer when there isn't one running (game start or after timeout).
-        # On valid word we advance turn but keep the same bomb timer.
+        # On valid answer we advance turn but keep the same bomb timer.
         if self.timer is None:
             duration = random.randint(self.timer_min_seconds, self.timer_max_seconds)
             self.timer_ends_at = time.time() + duration

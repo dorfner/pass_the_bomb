@@ -107,13 +107,13 @@ function GameOver({ winner }) {
 // ── Game ─────────────────────────────────────────────────────────
 
 function Game({ gameState, myName, onSubmit, feedback, onTyping, typing }) {
-    const [word, setWord] = useState("");
+    const [answer, setWord] = useState("");
     const inputRef = useRef(null);
     const timerRef = useRef(null);
 
     const isMyTurn = gameState.activePlayer === myName;
 
-    // Reset on new word
+    // Reset on new question
     useEffect(() => {
         setWord("");
         if (isMyTurn) inputRef.current?.focus();
@@ -130,12 +130,12 @@ function Game({ gameState, myName, onSubmit, feedback, onTyping, typing }) {
                 });
             });
         }
-    }, [gameState.ipa_word, gameState.activePlayer]);
+    }, [gameState.question, gameState.activePlayer]);
 
     const submit = (e) => {
         e.preventDefault();
-        if (word.trim() && isMyTurn) {
-            onSubmit(word.trim());
+        if (answer.trim() && isMyTurn) {
+            onSubmit(answer.trim());
             setWord("");
             if (onTyping) onTyping("");
         }
@@ -152,13 +152,13 @@ function Game({ gameState, myName, onSubmit, feedback, onTyping, typing }) {
                         }
                     </div>
 
-                    <div className="ipa_word">{gameState.ipa_word}</div>
+                    <div className="question">{gameState.question}</div>
 
                     <form onSubmit={submit}>
                         <input
                             ref={inputRef}
                             type="text"
-                            value={word}
+                            value={answer}
                             onChange={(e) => {
                                 const value = e.target.value;
                                 setWord(value);
@@ -168,7 +168,7 @@ function Game({ gameState, myName, onSubmit, feedback, onTyping, typing }) {
                             disabled={!isMyTurn}
                             autoFocus
                         />
-                        <button disabled={!word.trim() || !isMyTurn}>Envoyer</button>
+                        <button disabled={!answer.trim() || !isMyTurn}>Envoyer</button>
                     </form>
 
                     {typing?.text && (
@@ -192,13 +192,13 @@ function Game({ gameState, myName, onSubmit, feedback, onTyping, typing }) {
                 </div>
             </div>
 
-            {gameState.previousWord && (
-                <div className="card previous-word">
+            {gameState.previousQuestion && (
+                <div className="card previous-question">
                     <h3>Mot précédent</h3>
-                    <div className="previous-ipa">{gameState.previousWord}</div>
+                    <div className="question">{gameState.previousQuestion}</div>
                     <div className="previous-answers-label">Réponses correctes :</div>
                     <div className="previous-answers">
-                        {gameState.previousWordAnswers.map((answer, i) => (
+                        {gameState.previousQuestionAnswers.map((answer, i) => (
                             <span key={i} className="answer-tag">{answer}</span>
                         ))}
                     </div>
@@ -217,7 +217,7 @@ function App() {
     const [gameStarted, setGameStarted] = useState(false);
     const [gameOver, setGameOver] = useState(null);
     const [lobby, setLobby] = useState({ count: 0, players: [] });
-    const [gameState, setGameState] = useState({ ipa_word: "···", players: [], activePlayer: "", previousWord: "", previousWordAnswers: [] });
+    const [gameState, setGameState] = useState({ question: "···", players: [], activePlayer: "", previousQuestion: "", previousQuestionAnswers: [] });
     const [feedback, setFeedback] = useState(null);
     const [typing, setTyping] = useState(null);
 
@@ -235,11 +235,11 @@ function App() {
             case "NEW_TURN":
                 setGameStarted(true);
                 setGameState({
-                    ipa_word: lastMsg.ipa_word,
+                    question: lastMsg.question,
                     players: lastMsg.players,
                     activePlayer: lastMsg.activePlayer,
-                    previousWord: lastMsg.previousWord || "",
-                    previousWordAnswers: lastMsg.previousWordAnswers || [],
+                    previousQuestion: lastMsg.previousQuestion || "",
+                    previousQuestionAnswers: lastMsg.previousQuestionAnswers || [],
                 });
                 setFeedback({
                     previousAnswers: lastMsg.previousAnswers,
@@ -250,7 +250,7 @@ function App() {
                 setTyping({ player: lastMsg.player, text: lastMsg.text });
                 break;
             case "Valid":
-                setFeedback({ cls: "valid", text: `✓ ${lastMsg.word}` });
+                setFeedback({ cls: "valid", text: `✓ ${lastMsg.anwser}` });
                 break;
             case "Invalid":
                 setFeedback({ cls: "invalid", text: "✗ Mot invalide" });
@@ -310,7 +310,7 @@ function App() {
         <Game
             gameState={gameState}
             myName={myName}
-            onSubmit={(word) => send({ type: "SUBMIT", word })}
+            onSubmit={(answer) => send({ type: "SUBMIT", answer })}
             feedback={feedback}
             typing={typing}
             onTyping={(text) => send({ type: "TYPING", text })}
