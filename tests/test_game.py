@@ -61,7 +61,10 @@ class TestGameState(unittest.TestCase):
     def test_turn_based_only_active_submits(self):
         self.game.add_player(self.ws1, "A")
         self.game.add_player(self.ws2, "B")
+        self.game._start_game()
+        
         self.game.ipa_word = "ʁobo"
+        self.game.spellings = self.game.spelling_dict[self.game.ipa_word]
 
         # Determine who is active (current_turn=0 → ws1)
         active = self.game.player_order[self.game.current_turn]
@@ -79,9 +82,13 @@ class TestGameState(unittest.TestCase):
     def test_turn_advances_after_valid(self):
         self.game.add_player(self.ws1, "A")
         self.game.add_player(self.ws2, "B")
+        self.game._start_game()
+
         initial_turn = self.game.current_turn
 
         self.game.ipa_word = "ʁobo"
+        self.game.spellings = self.game.spelling_dict[self.game.ipa_word]
+        
         active = self.game.player_order[self.game.current_turn]
         self.game.submit_word(active, "robot")
 
