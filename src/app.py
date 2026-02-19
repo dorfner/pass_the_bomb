@@ -54,6 +54,9 @@ def websocket(ws):
                 if answer:
                     game.submit_answer(ws, answer)
 
+            elif msg_type == "PASS":
+                game.pass_turn(ws)
+
             elif msg_type == "TYPING":
                 text = msg.get("text", "")
                 game.broadcast_typing(ws, text)

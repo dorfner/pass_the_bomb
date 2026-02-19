@@ -32,8 +32,10 @@ class GameState:
         self.answers = []
         self.previous_question = ""
         self.previous_answers = []
+
         self.timer = None
         self.timer_ends_at = None  # when current turn timer expires (for -1s on wrong)
+        
         self.is_running = False
         self.current_turn = 0  # index into player_order
         self.start_votes = set()  # ws that voted to start
@@ -104,11 +106,27 @@ class GameState:
                 self._advance_turn()
                 self._start_turn()
             else:
-                self._reduce_timer_by_seconds(1)
+                # self._reduce_timer_by_seconds(1)
                 try:
                     ws.send(json.dumps({"type": "Invalid"}))
                 except Exception:
                     pass
+
+
+    def pass_turn():
+        with self.lock:
+            if not self.is_running or not self.player_order:
+                return
+
+            # Only the current player can submit
+            active_ws = self.player_order[self.current_turn % len(self.player_order)]
+            if ws != active_ws:
+                return
+
+            self._broadcast({"type": "Invalid"})
+            self._advance_turn()
+            self._start_turn()
+            
 
     def broadcast_typing(self, ws, text: str):
         """Broadcast the active player's current input to all players."""
@@ -235,12 +253,12 @@ class GameState:
 
         # Only start a new timer when there isn't one running (game start or after timeout).
         # On valid answer we advance turn but keep the same bomb timer.
-        if self.timer is None:
-            duration = random.randint(self.timer_min_seconds, self.timer_max_seconds)
-            self.timer_ends_at = time.time() + duration
-            self.timer = threading.Timer(duration, self._handle_timeout)
-            self.timer.daemon = True
-            self.timer.start()
+        # if self.timer is None:
+        #     duration = random.randint(self.timer_min_seconds, self.timer_max_seconds)
+        #     self.timer_ends_at = time.time() + duration
+        #     self.timer = threading.Timer(duration, self._handle_timeout)
+        #     self.timer.daemon = True
+        #     self.timer.start()
 
     def _handle_timeout(self):
         with self.lock:

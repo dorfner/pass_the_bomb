@@ -141,6 +141,15 @@ function Game({ gameState, myName, onSubmit, feedback, onTyping, typing }) {
         }
     };
 
+    const pass = (e) => {
+        e.preventDefault();
+        if (isMyTurn) {
+            onPass();
+            setWord("");
+            if (onTyping) onTyping("");
+        }
+    }
+
     return (
         <div className="game-container">
             <div className="game-main">
@@ -170,6 +179,7 @@ function Game({ gameState, myName, onSubmit, feedback, onTyping, typing }) {
                         />
                         <button disabled={!answer.trim() || !isMyTurn}>Envoyer</button>
                     </form>
+                    <button onSubmit={pass} disabled={!isMyTurn}>Pass</button>
 
                     {typing?.text && (
                         <div className="typing-indicator">
@@ -311,6 +321,7 @@ function App() {
             gameState={gameState}
             myName={myName}
             onSubmit={(answer) => send({ type: "SUBMIT", answer })}
+            onPass={send({ type: "PASS" })}
             feedback={feedback}
             typing={typing}
             onTyping={(text) => send({ type: "TYPING", text })}
