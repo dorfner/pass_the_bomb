@@ -106,7 +106,7 @@ function GameOver({ winner }) {
 
 // ── Game ─────────────────────────────────────────────────────────
 
-function Game({ gameState, myName, onSubmit, feedback, onTyping, typing }) {
+function Game({ gameState, myName, onSubmit, onPass, feedback, onTyping, typing }) {
     const [answer, setWord] = useState("");
     const inputRef = useRef(null);
     const timerRef = useRef(null);
@@ -179,7 +179,7 @@ function Game({ gameState, myName, onSubmit, feedback, onTyping, typing }) {
                         />
                         <button disabled={!answer.trim() || !isMyTurn}>Envoyer</button>
                     </form>
-                    <button onSubmit={pass} disabled={!isMyTurn}>Pass</button>
+                    <button onClick={pass} disabled={!isMyTurn}>Pass</button>
 
                     {typing?.text && (
                         <div className="typing-indicator">
@@ -321,7 +321,7 @@ function App() {
             gameState={gameState}
             myName={myName}
             onSubmit={(answer) => send({ type: "SUBMIT", answer })}
-            onPass={send({ type: "PASS" })}
+            onPass={() => send({ type: "PASS" })}
             feedback={feedback}
             typing={typing}
             onTyping={(text) => send({ type: "TYPING", text })}

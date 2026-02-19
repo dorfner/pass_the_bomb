@@ -53,6 +53,8 @@ class GameState:
                 and len(self.players) >= self.min_players_to_start
             ):
                 self._start_game()
+            
+            print("DEBUG", self.player_order)
 
     def remove_player(self, ws):
         with self.lock:
@@ -113,7 +115,7 @@ class GameState:
                     pass
 
 
-    def pass_turn():
+    def pass_turn(self, ws):
         with self.lock:
             if not self.is_running or not self.player_order:
                 return
@@ -123,10 +125,12 @@ class GameState:
             if ws != active_ws:
                 return
 
+            self.players[active_ws]["lives"] -= 1
+
             self._broadcast({"type": "Invalid"})
             self._advance_turn()
             self._start_turn()
-            
+
 
     def broadcast_typing(self, ws, text: str):
         """Broadcast the active player's current input to all players."""
