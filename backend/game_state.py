@@ -9,7 +9,7 @@ from backend.utils import remove_accents
 class GameState:
     """Thread-safe, turn-based game state manager."""
 
-    def __init__(self, spelling_dict, config: AppConfig | None = None):
+    def __init__(self, spelling_dict: dict, config: AppConfig | None = None):
         if config is None:
             config = AppConfig()
 
