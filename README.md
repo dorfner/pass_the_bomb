@@ -37,16 +37,8 @@ pass_the_bomb/
 └── Makefile
 ```
 
-### Backend (`backend/`)
-
 - **Langage** : Python 3.11+
-- **Dépendances** : `flask` + `flask-sock` + `threading`
-- **Rôle** : Logique de jeu, WebSocket, sert le frontend.
-
-### Frontend (`backend/static/` + `backend/templates/`)
-
-- **Technologie** : React 18 via CDN (zéro npm/node)
-- **Design** : Dark theme, Inter font, animations CSS
+- **Dépendances** : `flask` + `flask-sock`
 
 ### Tooling
-- **Makefile** : `install`, `test`, `run`, `format`, `clean`
+- **Makefile** : `install`, `test`, `run`, `clean`
