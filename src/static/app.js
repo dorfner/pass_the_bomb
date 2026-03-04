@@ -41,7 +41,7 @@ function Lobby({ onJoin }) {
     return (
         <div className="card lobby">
             <h1>Pass the B💣mb!!</h1>
-            <p>pipi table...</p>
+            <p>Ça va PÉTER!</p>
             <form onSubmit={submit}>
                 <input
                     type="text"
