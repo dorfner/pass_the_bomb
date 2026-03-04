@@ -7,9 +7,9 @@ import os
 from flask import Flask, render_template
 from flask_sock import Sock
 
-from src.config import load_config
-from src.game_state import GameState
-from src.utils import load_dictionary_from_file
+from config import load_config
+from game_state import GameState
+from utils import load_dictionary_from_file
 
 
 # ── App setup ─────────────────────────────────────────────────────
